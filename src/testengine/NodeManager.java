@@ -30,7 +30,7 @@ public abstract class NodeManager {
 	public final synchronized Session getSession() throws JSchException, IOException {
 		if(sessionPool.size()== 0) {
 			// create one & return
-			SSHConnector.getSSHSession(Properties.USER, Properties.PASSWORD, Properties.HOST, Properties.PORT);
+			sessionPool.add( SSHConnector.getSSHSession(Properties.USER, Properties.PASSWORD, Properties.HOST, Properties.PORT) );
 		}
 		return sessionPool.remove();
 	}
