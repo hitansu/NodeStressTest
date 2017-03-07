@@ -28,7 +28,7 @@ public class PRPCNodeManager extends NodeManager {
 			}
 			return true;
 		} catch(Exception e) {
-			//
+			System.out.println(e.getMessage());
 		}
 		return false;
 	}
