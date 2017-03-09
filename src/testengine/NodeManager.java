@@ -13,7 +13,7 @@ public abstract class NodeManager {
 	public int MAX_NODES= 7;
 	
 	Map<Integer, Node> clusterNodes;
-	Queue<Session> sessionPool;
+	private Queue<Session> sessionPool;
 	
 	public NodeManager() {
 		clusterNodes= new HashMap<>();
@@ -39,5 +39,12 @@ public abstract class NodeManager {
 		if(session!= null)
 			sessionPool.offer(session);
 	}
-
+	
+	public void setMaxNode(int max_node) {
+		this.MAX_NODES= max_node;
+	}
+	
+	public int getMaxNode() {
+		return MAX_NODES;
+	}
 }

@@ -1,6 +1,7 @@
 package testengine;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -9,7 +10,8 @@ import com.jcraft.jsch.Session;
 
 public class RemoteCommandExecutor implements CommandExecutor {
 
-	NodeManager nodeMngr;
+	private NodeManager nodeMngr;
+	private final String RESULT_DEL= ",";
 
 	public RemoteCommandExecutor(NodeManager nodeMngr) {
 		this.nodeMngr = nodeMngr;
@@ -30,7 +32,8 @@ public class RemoteCommandExecutor implements CommandExecutor {
 		return false;
 	}
 
-	private void executeCommand(Session session, String CMD) throws JSchException, IOException {
+	private String executeCommand(Session session, String CMD) throws JSchException, IOException {
+		String result= "";
 		Channel channel = session.openChannel("exec");
 		((ChannelExec) channel).setCommand(CMD);
 		channel.setInputStream(null);
@@ -44,6 +47,10 @@ public class RemoteCommandExecutor implements CommandExecutor {
 				int i = in.read(tmp, 0, 1024);
 				if (i < 0)
 					break;
+				if(!result.isEmpty()) {
+					result+= ",";
+				}
+				result+= new String(tmp, 0, i);
 				System.out.print(new String(tmp, 0, i));
 			}
 			if (channel.isClosed()) {
@@ -59,6 +66,29 @@ public class RemoteCommandExecutor implements CommandExecutor {
 		}
 		channel.disconnect();
 		// session.disconnect();
+		return result;
+	}
+
+	@Override
+	public void executeForResult(String command, List<String> result) {
+		Session session = null;
+		try {
+			session = nodeMngr.getSession();
+			String resultStr = executeCommand(session, command);
+			populateResult(resultStr, result);
+		} catch (JSchException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			nodeMngr.returnSession(session);
+		}
+	}
+	
+	private void populateResult(String str, List<String> r) {
+		str= str.trim();
+		String[] split = str.split(RESULT_DEL);
+		for(String s: split) {
+			r.add(s.trim());
+		}
 	}
 
 }

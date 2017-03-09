@@ -3,10 +3,16 @@ package testengine;
 public class Node {
 
 	int nodeid;
+	long pid;
 	NodeStatus status;
 	
-	public Node(int nodeid) {
+	public Node(int nodeid, long pid) {
 		this.nodeid= nodeid;
+		this.pid= pid;
+	}
+	
+	public long getPid() {
+		return pid;
 	}
 	
 	public void setStatus(NodeStatus status) {

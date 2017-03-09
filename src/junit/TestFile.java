@@ -3,7 +3,6 @@ package junit;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,13 +10,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import testengine.StressTestRunner;
+import testengine.ScaleStressTestRunnerImpl;
 
 @RunWith(Parameterized.class)
 public class TestFile {
 
-	private static StressTestRunner runnr;
+	private static ScaleStressTestRunnerImpl runnr;
 	private static int initialNodes;
+	
 	public TestFile(int initialNodes)
 	{
 		TestFile.initialNodes = initialNodes;
@@ -25,16 +25,23 @@ public class TestFile {
 	
 	@Parameterized.Parameters
 	public static Collection<Integer[]> input() {
-		return Arrays.asList(new Integer[][]{ {4},{8},{16} });
+		return Arrays.asList(new Integer[][]{ {1},{4},{7}});
+	}
+	
+	
+	@BeforeClass
+	public static void set() {
+		System.out.println("before class");
+		runnr= new ScaleStressTestRunnerImpl(initialNodes);
 	}
 	
 	@Before
 	public void before()
 	{ 
-		runnr= new StressTestRunner(initialNodes);
-	    runnr.startInitialNodes();
-	    if(initialNodes == 16) {
-	      runnr.stressTestEnabled();
+		System.out.println("before");
+	    runnr.addNode(initialNodes);
+	    if(initialNodes == 7) {
+	      runnr.enableStressTest();
 	    }
 
 	}
@@ -42,7 +49,7 @@ public class TestFile {
 	@AfterClass
 	public static void after()
 	{
-	    runnr.terminateAllNodes();
+	    runnr.terminate();
 	}
 
 	
@@ -50,16 +57,17 @@ public class TestFile {
 	public void test1()
 	{
 		System.out.println("Start of test");
-		System.out.println(initialNodes);
-		
-		/*try {
-			Thread.sleep(20000);
+		long sleep= 30000;
+		if(initialNodes== 7) {
+           sleep= 75000;
+		}
+		try {
+			Thread.sleep(sleep);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
 		System.out.println("End of test");
+		
 
 	}
-	
 }
