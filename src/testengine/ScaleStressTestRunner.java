@@ -1,8 +1,11 @@
 package testengine;
 
+import java.util.List;
+
 public abstract class ScaleStressTestRunner {
 	
-	NodeManager nodeManager;
+	//NodeManager nodeManager;
+	List<NodeManager> nodeManagerContainer;
 
 	public abstract void start();
 	public abstract void terminate();

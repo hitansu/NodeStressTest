@@ -8,7 +8,8 @@ public class PRPCNodeManager extends NodeManager {
 	private Script script;
 	private RemoteCommandExecutor remoteExecutor;
 	
-	public PRPCNodeManager() {
+	public PRPCNodeManager(String user, String password, String host) {
+		super(user, password, host);
 		script= new NodeScriptBuilder();
 		remoteExecutor= new RemoteCommandExecutor(this);
 	}

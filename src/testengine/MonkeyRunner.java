@@ -1,5 +1,6 @@
 package testengine;
 
+import java.util.List;
 import java.util.Random;
 
 public class MonkeyRunner {
@@ -7,8 +8,8 @@ public class MonkeyRunner {
 	private Thread t;
 	private MonkeyTaskRunner r;
 
-	public MonkeyRunner(NodeManager nodeMngr) {
-		r = new MonkeyTaskRunner(nodeMngr);
+	public MonkeyRunner(List<NodeManager> nodeMngrs) {
+		r = new MonkeyTaskRunner(nodeMngrs);
 		t = new Thread(r, "Monkey Runner");
 	}
 
@@ -26,11 +27,11 @@ public class MonkeyRunner {
 		private static final String[] types = { "START", "STOP", "RESTART" };
 		private boolean isEnabled= false;
 
-		private NodeManager mngr;
+		private List<NodeManager> mngrs;
 		private Random rand;
 
-		public MonkeyTaskRunner(NodeManager mngr) {
-			this.mngr = mngr;
+		public MonkeyTaskRunner(List<NodeManager> mngrs) {
+			this.mngrs = mngrs;
 			rand = new Random();
 		}
 		
@@ -52,6 +53,7 @@ public class MonkeyRunner {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				NodeManager mngr= getNodeManager(mngrs);
 				if(mngr.getTotalNodes()<1)
 					continue;
 				int serverNo= getNextServer(mngr);
@@ -73,11 +75,23 @@ public class MonkeyRunner {
 			}
 
 		}
+		
+		private NodeManager getNodeManager(List<NodeManager> mngrs) {
+			int size = mngrs.size();
+			int randomIndex= rand.nextInt(size);
+			int mSize= size;
+			while(mngrs.get(randomIndex).getTotalNodes()== 7 && mSize>0) {
+				randomIndex= rand.nextInt(size);
+				mSize--;
+			}
+			return mngrs.get(randomIndex);
+			
+		}
 
 		private int getNextServer(NodeManager mngr2) {
-			int server_no= rand.nextInt(mngr.getTotalNodes())+1;
-			while(mngr.clusterNodes.get(server_no)!= null && mngr.clusterNodes.get(server_no).status!= NodeStatus.ACTIVE) {
-				server_no= rand.nextInt(mngr.getTotalNodes())+1;
+			int server_no= rand.nextInt(mngr2.getTotalNodes())+1;
+			while(mngr2.clusterNodes.get(server_no)!= null && mngr2.clusterNodes.get(server_no).status!= NodeStatus.ACTIVE) {
+				server_no= rand.nextInt(mngr2.getTotalNodes())+1;
 			}
 			return server_no;
 		}

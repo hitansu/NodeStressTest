@@ -1,4 +1,6 @@
 package testengine;
+import static testengine.Properties.PORT;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,14 +12,20 @@ import com.jcraft.jsch.Session;
 
 public abstract class NodeManager {
 	
-	public int MAX_NODES= 7;
+	public int MAX_NODES= Properties.tomcatServersLoc.length;
 	
 	Map<Integer, Node> clusterNodes;
 	private Queue<Session> sessionPool;
+	private String user;
+	private String password;
+	private String host;
 	
-	public NodeManager() {
+	public NodeManager(String user, String password, String host) {
 		clusterNodes= new HashMap<>();
 		sessionPool= new LinkedList<>();
+		this.user= user;
+		this.password= password;
+		this.host= host;
 	}
 	
 	public abstract int getTotalNodes();
@@ -30,7 +38,7 @@ public abstract class NodeManager {
 	public final synchronized Session getSession() throws JSchException, IOException {
 		if(sessionPool.size()== 0) {
 			// create one & return
-			sessionPool.add( SSHConnector.getSSHSession(Properties.USER, Properties.PASSWORD, Properties.HOST, Properties.PORT) );
+			sessionPool.add( SSHConnector.getSSHSession(user, password, host, PORT) );
 		}
 		return sessionPool.remove();
 	}
