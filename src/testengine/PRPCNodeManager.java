@@ -61,32 +61,11 @@ public class PRPCNodeManager extends NodeManager {
 	@Override
 	public boolean stopALLNodes() {
 		if(clusterNodes.size()== 0) return true;
-//		String command = script.getForceShutDownScript();
-		String command;
 		try {
-		//	boolean isSucceed = remoteExecutor.execute(command);
-			boolean isSucceed= false;
-			Node node= null;
-			for(int i= 1;i<=MAX_NODES;i++) {
-				node= clusterNodes.get(i);
-				long pid;
-				if(node== null) {
-					List<String> pids= new ArrayList<>();
-					remoteExecutor.executeForResult(script.getProcessIdScript(i), pids);
-					if(pids.size()>0) {
-						pid= Long.parseLong(pids.get(0));
-						command= script.getKillScriptForProcess(Long.parseLong(pids.get(0)));
-						isSucceed= remoteExecutor.execute(command);
-					}
-				} else {
-					pid= node.getPid();
-					command= script.getKillScriptForProcess(pid);
-					isSucceed= remoteExecutor.execute(command);
-					node.setStatus(NodeStatus.IDLE);
-					removeNodeFrmList(node);
-				}
+			for(int i= 1;i<=clusterNodes.size();i++) {
+				stopNode(i);
 			}
-			return isSucceed;
+			return true;
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -97,16 +76,26 @@ public class PRPCNodeManager extends NodeManager {
 	@Override
 	public boolean stopNode(int nodeid) {
 		Node node = clusterNodes.get(nodeid);
-		if(node.getStatus()== NodeStatus.ACTIVE) {
-			// stop node
-			long pid= node.getPid();
-			String command= script.getKillScriptForProcess(pid);
-			boolean isSucceed = remoteExecutor.execute(command);
+		long pid;
+		String command;
+		boolean isSucceed= false;
+		if(node== null) {
+			List<String> pids= new ArrayList<>();
+			remoteExecutor.executeForResult(script.getProcessIdScript(nodeid), pids);
+			if(pids.size()>0) {
+				pid= Long.parseLong(pids.get(0));
+				command= script.getKillScriptForProcess(Long.parseLong(pids.get(0)));
+				isSucceed= remoteExecutor.execute(command);
+			}
+		} else {
+			pid= node.getPid();
+			command= script.getKillScriptForProcess(pid);
+			isSucceed= remoteExecutor.execute(command);
 			node.setStatus(NodeStatus.IDLE);
 			removeNodeFrmList(node);
-			return isSucceed;
 		}
-		return false;
+		
+		return isSucceed;
 	}
 	
 	private synchronized void addNodeToList(int nodeid, Node node) {
