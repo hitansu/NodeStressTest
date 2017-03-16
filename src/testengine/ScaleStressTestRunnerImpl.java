@@ -75,7 +75,7 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		if(monkeyRunner!= null)
 			monkeyRunner.stop();
 		for(NodeManager nodeManager: nodeManagerContainer) {
-			nodeManager.startALLNodes();
+			nodeManager.stopALLNodes();
 		}
 	//	nodeManager.stopALLNodes();
 	}

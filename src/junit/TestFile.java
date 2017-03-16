@@ -41,7 +41,7 @@ public class TestFile {
 		System.out.println("before");
 	    runnr.addNode(initialNodes);
 	    if(initialNodes == 7) {
-	      runnr.enableStressTest();
+	   //   runnr.enableStressTest();
 	    }
 
 	}
@@ -57,6 +57,9 @@ public class TestFile {
 	public void test1()
 	{
 		System.out.println("Start of test");
+		
+		/*simulate long running test*/
+		
 		long sleep= 30000;
 		if(initialNodes== 7) {
            sleep= 75000;
@@ -66,6 +69,8 @@ public class TestFile {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		
 		System.out.println("End of test");
 		
 

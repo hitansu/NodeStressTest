@@ -11,7 +11,7 @@ public class PRPCNodeManager extends NodeManager {
 	public PRPCNodeManager(String user, String password, String host) {
 		super(user, password, host);
 		script= new NodeScriptBuilder();
-		remoteExecutor= new RemoteCommandExecutor(this);
+		remoteExecutor= new RemoteCommandExecutor(this, password);
 	}
 
 	@Override
@@ -61,19 +61,34 @@ public class PRPCNodeManager extends NodeManager {
 	@Override
 	public boolean stopALLNodes() {
 		if(clusterNodes.size()== 0) return true;
-		String command = script.getForceShutDownScript();
+//		String command = script.getForceShutDownScript();
+		String command;
 		try {
-			boolean isSucceed = remoteExecutor.execute(command);
+		//	boolean isSucceed = remoteExecutor.execute(command);
+			boolean isSucceed= false;
 			Node node= null;
 			for(int i= 1;i<=MAX_NODES;i++) {
 				node= clusterNodes.get(i);
-				if(node== null) continue;
-				node.setStatus(NodeStatus.IDLE);
-				removeNodeFrmList(node);
+				long pid;
+				if(node== null) {
+					List<String> pids= new ArrayList<>();
+					remoteExecutor.executeForResult(script.getProcessIdScript(i), pids);
+					if(pids.size()>0) {
+						pid= Long.parseLong(pids.get(0));
+						command= script.getKillScriptForProcess(Long.parseLong(pids.get(0)));
+						isSucceed= remoteExecutor.execute(command);
+					}
+				} else {
+					pid= node.getPid();
+					command= script.getKillScriptForProcess(pid);
+					isSucceed= remoteExecutor.execute(command);
+					node.setStatus(NodeStatus.IDLE);
+					removeNodeFrmList(node);
+				}
 			}
 			return isSucceed;
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		return false;
