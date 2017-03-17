@@ -20,6 +20,10 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 	private boolean isWaitForServerUp;
 	private long serverWaitPeriod;
 	private Random rand;
+	private boolean aIsStressTestEnabled= false;
+	private int THRESHOLD_NODE_COUNT_FOR_STRESS;
+	private int totalActiveNodes;
+	private int MAX_POSSIBLE_NODE;
 	
 	public ScaleStressTestRunnerImpl(int initialNodes) {
 		rand= new Random();
@@ -31,21 +35,6 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		isWaitForServerUp= WAIT_FOR_SERVER_UP;
 	}
 	
-	private void addNodeManager(List<NodeManager> nodeManagerContainer) {
-		String[] hosts= Properties.HOST.split(",");
-		String[] users= Properties.USER.split(",");
-		String[] passwords= Properties.PASSWORD.split(",");
-		if(hosts.length!= users.length || users.length!= passwords.length) {
-			throw new IllegalStateException("For each host username & password should be present");
-		}
-		
-		for(int i= 0;i<hosts.length;i++) {
-			NodeManager nodeMngr= new PRPCNodeManager(users[i], passwords[i], hosts[i]);
-			nodeManagerContainer.add(nodeMngr);
-		}
-		
-	}
-
 	public ScaleStressTestRunnerImpl() {
 		this(1);
 	}
@@ -59,6 +48,10 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		if(isWaitForServerUp) {
 			waitForServerUp(serverWaitPeriod);
 		}
+		totalActiveNodes= initialNodes;
+		if(aIsStressTestEnabled && totalActiveNodes>= THRESHOLD_NODE_COUNT_FOR_STRESS) {
+			startMonkeyRunner();
+		}
 	}
 	
 	@Override
@@ -69,31 +62,9 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		if(isWaitForServerUp) {
 			waitForServerUp(serverWaitPeriod);
 		}
+		totalActiveNodes= MAX_POSSIBLE_NODE;
+		startMonkeyRunner();
 	}
-	
-	@Override
-	public void terminate()
-	{
-		if(monkeyRunner!= null)
-			monkeyRunner.stop();
-		for(NodeManager nodeManager: nodeManagerContainer) {
-			nodeManager.stopALLNodes();
-		}
-	}
-	
-	@Override
-	public void terminateNode(int node_no) {
-		for(int i= 1;i<= node_no;i++) {
-			getNodeManager().stopNode(i);
-		}
-	}
-
-	
-	@Override
-	public void enableStressTest() {
-		monkeyRunner.start();
-	}
-	
 	
 	@Override
 	public void addNode(int count) {
@@ -111,6 +82,62 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		}
 		if(isWaitForServerUp) {
 			waitForServerUp(serverWaitPeriod);
+		}
+		totalActiveNodes= (totalActiveNodes+count) > MAX_POSSIBLE_NODE ? MAX_POSSIBLE_NODE: (totalActiveNodes+count);
+		if(aIsStressTestEnabled && totalActiveNodes>= THRESHOLD_NODE_COUNT_FOR_STRESS) {
+			startMonkeyRunner();
+		}
+	}
+	
+	@Override
+	public void terminate()
+	{
+		if(monkeyRunner!= null)
+			monkeyRunner.stop();
+		for(NodeManager nodeManager: nodeManagerContainer) {
+			nodeManager.stopALLNodes();
+		}
+		totalActiveNodes= 0;
+	}
+	
+	@Override
+	public void terminateNode(int node_id) {
+		getNodeManager().stopNode(node_id);
+		totalActiveNodes= (totalActiveNodes-1) < 0 ? 0: (totalActiveNodes-1);
+	}
+
+	
+	@Override
+	public void enableStressTest() {
+		aIsStressTestEnabled= true;
+		THRESHOLD_NODE_COUNT_FOR_STRESS= (3/4)*MAX_POSSIBLE_NODE;
+	}
+	
+	@Override
+	public void enableStressTest(int thresholdNodeCount) {
+		aIsStressTestEnabled= true;
+		THRESHOLD_NODE_COUNT_FOR_STRESS= thresholdNodeCount;
+	}
+	
+	private void addNodeManager(List<NodeManager> nodeManagerContainer) {
+		String[] hosts= Properties.HOST.split(",");
+		String[] users= Properties.USER.split(",");
+		String[] passwords= Properties.PASSWORD.split(",");
+		if(hosts.length!= users.length || users.length!= passwords.length) {
+			throw new IllegalStateException("For each host username & password should be present");
+		}
+		
+		for(int i= 0;i<hosts.length;i++) {
+			NodeManager nodeMngr= new PRPCNodeManager(users[i], passwords[i], hosts[i]);
+			nodeManagerContainer.add(nodeMngr);
+			MAX_POSSIBLE_NODE+= nodeMngr.getMaxNode();
+		}
+		
+	}
+	
+	private void startMonkeyRunner() {
+		if(monkeyRunner!= null && !monkeyRunner.isRunning()) {
+			monkeyRunner.start();
 		}
 	}
 	
@@ -131,7 +158,6 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 			mSize--;
 		}
 		
-		return nodeManagerContainer.get(randomIndex);
-		
+		return nodeManagerContainer.get(randomIndex);	
 	}
 }

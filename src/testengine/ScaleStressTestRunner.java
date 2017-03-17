@@ -18,4 +18,5 @@ public abstract class ScaleStressTestRunner {
 
 	public abstract void terminateNode(int node_no);
 	public abstract void enableStressTest();
+	public abstract void enableStressTest(int thresholdNodeCount);
 }

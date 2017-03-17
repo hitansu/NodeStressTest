@@ -26,6 +26,10 @@ public class MonkeyRunner {
 	public void stop() {
 		r.disable();
 	}
+	
+	public boolean isRunning() {
+		return r.isEnabled== true;
+	}
 
 	static class MonkeyTaskRunner implements Runnable {
 

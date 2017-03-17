@@ -55,4 +55,8 @@ public abstract class NodeManager {
 	public int getMaxNode() {
 		return Properties.getMaxNode();
 	}
+	
+	public int getCurrentNodeCount() {
+		return clusterNodes.size();
+	}
 }
