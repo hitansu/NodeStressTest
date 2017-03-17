@@ -25,7 +25,7 @@ public class TestFile {
 	
 	@Parameterized.Parameters
 	public static Collection<Integer[]> input() {
-		return Arrays.asList(new Integer[][]{{4}});
+		return Arrays.asList(new Integer[][]{{4},{7}});
 	}
 	
 	
@@ -33,6 +33,7 @@ public class TestFile {
 	public static void set() {
 		System.out.println("before class");
 		runnr= new ScaleStressTestRunnerImpl(initialNodes);
+		runnr.enableStressTest(4);
 	}
 	
 	@Before
@@ -40,16 +41,12 @@ public class TestFile {
 	{ 
 		System.out.println("before");
 	    runnr.addNode(initialNodes);
-	    if(initialNodes == 7) {
-	   //   runnr.enableStressTest();
-	    }
-
 	}
 	
 	@AfterClass
 	public static void after()
 	{
-	  //  runnr.terminate();
+	    runnr.terminate();
 	}
 
 	

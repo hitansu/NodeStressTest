@@ -33,7 +33,7 @@ public class MonkeyRunner {
 
 	static class MonkeyTaskRunner implements Runnable {
 
-		private static final String[] types = { "START", "STOP", "RESTART" };
+		private static final String[] types = { "STOP", "RESTART" };
 		private boolean isEnabled= false;
 
 		private List<NodeManager> mngrs;
@@ -56,7 +56,7 @@ public class MonkeyRunner {
 		public void run() {
 			long next_sleepTime= 12000;
 			while (isEnabled) {
-				next_sleepTime= rand.nextInt(80000-12000);
+				next_sleepTime= next_sleepTime+rand.nextInt(20000);
 				try {
 					Thread.sleep(next_sleepTime);
 				} catch (InterruptedException e) {
@@ -69,9 +69,6 @@ public class MonkeyRunner {
 				String TYPE= types[rand.nextInt(types.length)];
 				System.out.println("Monkey runner: "+serverNo + " action "+TYPE);
 				switch (TYPE) {
-					case "START":
-						mngr.startNode(serverNo);
-						break;
 					case "STOP":
 						mngr.stopNode(serverNo);
 						break;
@@ -99,7 +96,7 @@ public class MonkeyRunner {
 
 		private int getNextServer(NodeManager mngr2) {
 			int server_no= rand.nextInt(mngr2.getTotalNodes())+1;
-			while(mngr2.clusterNodes.get(server_no)!= null && mngr2.clusterNodes.get(server_no).status!= NodeStatus.ACTIVE) {
+			while(mngr2.clusterNodes.get(server_no)!= null && mngr2.clusterNodes.get(server_no).getStatus()!= NodeStatus.ACTIVE) {
 				server_no= rand.nextInt(mngr2.getTotalNodes())+1;
 			}
 			return server_no;

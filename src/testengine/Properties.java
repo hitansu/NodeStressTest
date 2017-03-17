@@ -13,13 +13,13 @@ public class Properties {
 	**/
 	
 	/*root user for the machine*/
-    static final String USER= ""; //
+    static final String USER= "root"; //
     
     /*password for root user*/
-    static final String PASSWORD= "";
+    static final String PASSWORD= "pegasys1+";
     
     /*host names. It should be separated by , like host1,host2,host3 */
-    static final String HOST= "";
+    static final String HOST= "10.150.68.171";
     
     /*root directory inside which all the tomcat instance are present*/
     public static final String ROOT_DIR= "/dsk01/tomcat7/";
