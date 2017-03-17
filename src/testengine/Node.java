@@ -1,10 +1,15 @@
 package testengine;
 
+/**
+ * Represents each Node
+ * @author jenah
+ *
+ */
 public class Node {
 
-	int nodeid;
-	long pid;
-	NodeStatus status;
+	private int nodeid;
+	private long pid= Long.MIN_VALUE;
+	private NodeStatus status;
 	
 	public Node(int nodeid, long pid) {
 		this.nodeid= nodeid;

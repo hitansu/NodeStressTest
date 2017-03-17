@@ -3,6 +3,11 @@ package testengine;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Randomly picks any node to shut-down & start & restart
+ * @author jenah
+ *
+ */
 public class MonkeyRunner {
 
 	private Thread t;

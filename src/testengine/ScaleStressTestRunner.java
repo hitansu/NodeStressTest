@@ -4,7 +4,6 @@ import java.util.List;
 
 public abstract class ScaleStressTestRunner {
 	
-	//NodeManager nodeManager;
 	List<NodeManager> nodeManagerContainer;
 
 	public abstract void start();

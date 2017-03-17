@@ -11,17 +11,15 @@ public class Properties {
 	static final String FIVE_SERVER_SCRIPT= "";
 	static final int PORT= 22;
 	*/
-	/*user: root
-      pass: pega#1  */
 	
 	/*root user for the machine*/
-    static final String USER= "test"; //pega
+    static final String USER= ""; //
     
     /*password for root user*/
-    static final String PASSWORD= "pega1#";
+    static final String PASSWORD= "";
     
-    /*host name*/
-    static final String HOST= "10.150.68.171";
+    /*host names. It should be separated by , like host1,host2,host3 */
+    static final String HOST= "";
     
     /*root directory inside which all the tomcat instance are present*/
     public static final String ROOT_DIR= "/dsk01/tomcat7/";
@@ -36,16 +34,21 @@ public class Properties {
     static final int PORT= 22;
     
     /*dir under root directory where all tomcat instances are installed*/
+    /*NOTE: Each instance should have same dir set up*/
     static final String[] tomcatServersLoc= {"system1", "system2", "system3", "system4", "system5", "system6", "system7"};
     
     /*wait for the application to be up*/
-    static final long SERVER_BOOT_TIME= 120000;
+    static final long SERVER_BOOT_TIME= 12000;
     
     /*whether to wait for the application be up*/
     static final boolean WAIT_FOR_SERVER_UP= true;
     
     static int getMaxNode() {
     	return tomcatServersLoc.length;
+    }
+    
+    static String getServerName(int i) {
+    	return tomcatServersLoc[i];
     }
 
 }

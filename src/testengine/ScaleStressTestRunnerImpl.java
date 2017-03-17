@@ -17,7 +17,6 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 	private Random rand;
 	
 	public ScaleStressTestRunnerImpl(int initialNodes) {
-	//	nodeManager= new PRPCNodeManager();
 		rand= new Random();
 		nodeManagerContainer= new ArrayList<>();
 		addNodeManager(nodeManagerContainer);
@@ -50,7 +49,6 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 	public void start() {
 		for(int i =1;i<=initialNodes;i++)
 		{
-			//nodeManager.startNode(i);
 			getNodeManager().startNode(i);
 		}
 		if(isWaitForServerUp) {
@@ -63,7 +61,6 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		for(NodeManager nodeManager: nodeManagerContainer) {
 			nodeManager.startALLNodes();
 		}
-	//	nodeManager.startALLNodes();
 		if(isWaitForServerUp) {
 			waitForServerUp(serverWaitPeriod);
 		}
@@ -77,13 +74,11 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		for(NodeManager nodeManager: nodeManagerContainer) {
 			nodeManager.stopALLNodes();
 		}
-	//	nodeManager.stopALLNodes();
 	}
 	
 	@Override
 	public void terminateNode(int node_no) {
 		for(int i= 1;i<= node_no;i++) {
-		//	nodeManager.stopNode(i);
 			getNodeManager().stopNode(i);
 		}
 	}
@@ -98,7 +93,7 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 	@Override
 	public void addNode(int count) {
 		int successCount= 0;
-		int MAX= nodeManagerContainer.get(0).MAX_NODES;
+		int MAX= nodeManagerContainer.get(0).getMaxNode();
 		for(int i= 1;i< MAX;i++) {
 			NodeManager nodeManager= getNodeManager();
 			Node node = nodeManager.clusterNodes.get(i);

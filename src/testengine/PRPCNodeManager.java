@@ -10,7 +10,7 @@ public class PRPCNodeManager extends NodeManager {
 	
 	public PRPCNodeManager(String user, String password, String host) {
 		super(user, password, host);
-		script= new NodeScriptBuilder();
+		script= new NodeScriptBuilderUnix();
 		remoteExecutor= new RemoteCommandExecutor(this, password);
 	}
 
@@ -25,6 +25,7 @@ public class PRPCNodeManager extends NodeManager {
 			String COMMAND = script.getAllNodeStartStopScript(NODE_ACTION.START);
 			boolean isSucceed = remoteExecutor.execute(COMMAND);
 			Node node= null;
+			int MAX_NODES= getMaxNode();
 			for(int i= 1;i<=MAX_NODES;i++) {
 				List<String> pids= new ArrayList<String>();
 				remoteExecutor.executeForResult(script.getProcessIdScript(i), pids);
@@ -79,7 +80,7 @@ public class PRPCNodeManager extends NodeManager {
 		long pid;
 		String command;
 		boolean isSucceed= false;
-		if(node== null) {
+		if(node== null || node.getPid()== Long.MIN_VALUE) {
 			List<String> pids= new ArrayList<>();
 			remoteExecutor.executeForResult(script.getProcessIdScript(nodeid), pids);
 			if(pids.size()>0) {

@@ -9,16 +9,20 @@ import java.util.Queue;
 
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-
+/**
+ * Represents a cluster group, which might contain more than one nodes, in a host
+ * 
+ * @author jenah
+ *
+ */
 public abstract class NodeManager {
 	
-	public int MAX_NODES= Properties.tomcatServersLoc.length;
-	
-	Map<Integer, Node> clusterNodes;
 	private Queue<Session> sessionPool;
 	private String user;
 	private String password;
 	private String host;
+	
+	Map<Integer, Node> clusterNodes;
 	
 	public NodeManager(String user, String password, String host) {
 		clusterNodes= new HashMap<>();
@@ -48,11 +52,7 @@ public abstract class NodeManager {
 			sessionPool.offer(session);
 	}
 	
-	public void setMaxNode(int max_node) {
-		this.MAX_NODES= max_node;
-	}
-	
 	public int getMaxNode() {
-		return MAX_NODES;
+		return Properties.getMaxNode();
 	}
 }

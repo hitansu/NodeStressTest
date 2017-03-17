@@ -1,14 +1,18 @@
 package testengine;
 
-public class NodeScriptBuilder implements Script {
+import static testengine.Properties.ALL_SERVER_SCRIPT;
+import static testengine.Properties.ROOT_DIR;
+import static testengine.Properties.getServerName;
+
+public class NodeScriptBuilderUnix implements Script {
 
 	@Override
 	public String getSingleNodeStartStopScript(NODE_ACTION action, int nodeid) {
 		String script= "";
 		if(action.equals(NODE_ACTION.START))
-			script= "sh"+" "+Properties.ROOT_DIR+Properties.tomcatServersLoc[nodeid-1]+"/"+"bin/"+"startup.sh";
+			script= "sh"+" "+ROOT_DIR+getServerName(nodeid-1)+"/"+"bin/"+"startup.sh";
 		else
-			script= "sh"+" "+Properties.ROOT_DIR+Properties.tomcatServersLoc[nodeid-1]+"/"+"bin/"+"shutdown.sh";
+			script= "sh"+" "+ROOT_DIR+getServerName(nodeid-1)+"/"+"bin/"+"shutdown.sh";
 		
 		if(script== null || script.isEmpty()) 
 			throw new IllegalArgumentException("Script cant be empty");
@@ -20,9 +24,9 @@ public class NodeScriptBuilder implements Script {
 	public String getAllNodeStartStopScript(NODE_ACTION action) {
 		String script= "";
 		if(action.equals(NODE_ACTION.START))
-			script= "sh"+" "+Properties.ROOT_DIR+Properties.ALL_SERVER_SCRIPT+" "+"start";
+			script= "sh"+" "+ROOT_DIR+ALL_SERVER_SCRIPT+" "+"start";
 		else
-			script= "sh"+" "+Properties.ROOT_DIR+Properties.ALL_SERVER_SCRIPT+" "+"stop";
+			script= "sh"+" "+ROOT_DIR+ALL_SERVER_SCRIPT+" "+"stop";
 		
 		if(script== null || script.isEmpty()) 
 			throw new IllegalArgumentException("Script cant be empty");

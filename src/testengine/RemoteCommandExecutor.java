@@ -1,7 +1,6 @@
 package testengine;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 import com.jcraft.jsch.Channel;
@@ -13,11 +12,9 @@ public class RemoteCommandExecutor implements CommandExecutor {
 
 	private NodeManager nodeMngr;
 	private final String RESULT_DEL= ",";
-	private final String password;
 
 	public RemoteCommandExecutor(NodeManager nodeMngr, String password) {
 		this.nodeMngr = nodeMngr;
-		this.password= password;
 	}
 
 	@Override
@@ -38,16 +35,11 @@ public class RemoteCommandExecutor implements CommandExecutor {
 	private String executeCommand(Session session, String CMD) throws JSchException, IOException {
 		String result= "";
 		Channel channel = session.openChannel("exec");
-		CMD= "sudo -S -p '' "+CMD;
-	//	((ChannelExec) channel).setPty(true);
 		((ChannelExec) channel).setCommand(CMD);
-	//	channel.setInputStream(null);
+		channel.setInputStream(null);
 		((ChannelExec) channel).setErrStream(System.err);
 		InputStream in = channel.getInputStream();
-		OutputStream out= channel.getOutputStream();
 		channel.connect();
-		out.write((password+"\n").getBytes());
-		out.flush();
 
 		byte[] tmp = new byte[1024];
 		while (true) {
@@ -73,7 +65,6 @@ public class RemoteCommandExecutor implements CommandExecutor {
 			}
 		}
 		channel.disconnect();
-		// session.disconnect();
 		return result;
 	}
 

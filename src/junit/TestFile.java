@@ -25,7 +25,7 @@ public class TestFile {
 	
 	@Parameterized.Parameters
 	public static Collection<Integer[]> input() {
-		return Arrays.asList(new Integer[][]{ {1},{4},{7}});
+		return Arrays.asList(new Integer[][]{{4}});
 	}
 	
 	
@@ -49,7 +49,7 @@ public class TestFile {
 	@AfterClass
 	public static void after()
 	{
-	    runnr.terminate();
+	  //  runnr.terminate();
 	}
 
 	
@@ -60,7 +60,7 @@ public class TestFile {
 		
 		/*simulate long running test*/
 		
-		long sleep= 30000;
+		long sleep= 3000;
 		if(initialNodes== 7) {
            sleep= 75000;
 		}
