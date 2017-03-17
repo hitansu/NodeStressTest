@@ -6,6 +6,11 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+/**
+ * SSH session connector
+ * @author jenah
+ *
+ */
 public class SSHConnector {
 
 	public static Session getSSHSession(String username, String password, String host, int port) throws JSchException, IOException {

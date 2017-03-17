@@ -2,6 +2,11 @@ package testengine;
 
 import java.util.List;
 
+/**
+ * Scale,Stress test runner
+ * @author jenah
+ *
+ */
 public abstract class ScaleStressTestRunner {
 	
 	List<NodeManager> nodeManagerContainer;

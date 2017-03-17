@@ -1,5 +1,10 @@
 package testengine;
 
+/**
+ * Node status
+ * @author jenah
+ *
+ */
 public enum NodeStatus {
 
 	IDLE,

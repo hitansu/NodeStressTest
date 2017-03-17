@@ -1,5 +1,10 @@
 package testengine;
 
+/**
+ * Script interface for Node start,stop
+ * @author jenah
+ *
+ */
 public interface Script {
 	
 	public String getSingleNodeStartStopScript(NODE_ACTION action, int nodeid);

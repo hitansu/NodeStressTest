@@ -3,6 +3,11 @@ package testengine;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of NodeManager
+ * @author jenah
+ *
+ */
 public class PRPCNodeManager extends NodeManager {
 	
 	private Script script;

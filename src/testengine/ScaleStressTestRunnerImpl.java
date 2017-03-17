@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Scale,Stress test implementation
+ * @author jenah
+ *
+ */
 public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 
 	private MonkeyRunner monkeyRunner;

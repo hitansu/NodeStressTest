@@ -8,6 +8,11 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
+/**
+ * Command executor implementation
+ * @author jenah
+ *
+ */
 public class RemoteCommandExecutor implements CommandExecutor {
 
 	private NodeManager nodeMngr;

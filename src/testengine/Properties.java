@@ -10,7 +10,7 @@ public class Properties {
 	public static final String ALL_SERVER_SCRIPT= "start_stop_ALL.sh";
 	static final String FIVE_SERVER_SCRIPT= "";
 	static final int PORT= 22;
-	*/
+	**/
 	
 	/*root user for the machine*/
     static final String USER= ""; //

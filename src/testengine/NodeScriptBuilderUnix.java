@@ -4,6 +4,11 @@ import static testengine.Properties.ALL_SERVER_SCRIPT;
 import static testengine.Properties.ROOT_DIR;
 import static testengine.Properties.getServerName;
 
+/**
+ * Script for unix
+ * @author jenah
+ *
+ */
 public class NodeScriptBuilderUnix implements Script {
 
 	@Override

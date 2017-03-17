@@ -58,7 +58,7 @@ public class TestFile {
 	{
 		System.out.println("Start of test");
 		
-		/*simulate long running test*/
+		/*simulate long running test**/
 		
 		long sleep= 3000;
 		if(initialNodes== 7) {
