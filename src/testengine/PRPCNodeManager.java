@@ -50,9 +50,15 @@ public class PRPCNodeManager extends NodeManager {
 	public boolean startNode(int nodeid) {
 		boolean isSucceed= false;
 		try {
+			List<String> pids= new ArrayList<>();
+			if(checkIfAlreadyExist(nodeid, pids)) {
+				Node node= new Node(nodeid, Long.parseLong(pids.get(0)));
+				node.setStatus(NodeStatus.ACTIVE);
+				addNodeToList(nodeid, node);
+				return true;
+			}
 			String COMMAND = script.getSingleNodeStartStopScript(NODE_ACTION.START, nodeid);
 			isSucceed = remoteExecutor.execute(COMMAND);
-			List<String> pids= new ArrayList<>();
 			remoteExecutor.executeForResult(script.getProcessIdScript(nodeid), pids);
 			Node node= new Node(nodeid, Long.parseLong(pids.get(0)));
 			System.out.println("Process id: "+nodeid+"::"+Long.parseLong(pids.get(0)));
@@ -102,6 +108,14 @@ public class PRPCNodeManager extends NodeManager {
 		}
 		
 		return isSucceed;
+	}
+	
+	private boolean checkIfAlreadyExist(int nodeid, List<String> pids) {
+		remoteExecutor.executeForResult(script.getProcessIdScript(nodeid), pids);
+		if(pids.size()== 1) {
+			return true;
+		}
+		return false;
 	}
 	
 	private synchronized void addNodeToList(int nodeid, Node node) {

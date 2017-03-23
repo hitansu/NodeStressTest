@@ -2,7 +2,6 @@ package testengine;
 
 import static testengine.Properties.SERVER_BOOT_TIME;
 import static testengine.Properties.WAIT_FOR_SERVER_UP;
-import static testengine.Properties.getMaxNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +152,7 @@ public class ScaleStressTestRunnerImpl extends ScaleStressTestRunner {
 		int size = nodeManagerContainer.size();
 		int randomIndex= rand.nextInt(size);
 		int mSize= size;
-		while(nodeManagerContainer.get(randomIndex).getTotalNodes()== getMaxNode() && mSize>0) {
+		while(nodeManagerContainer.get(randomIndex).getTotalNodes()== Properties.getMaxNode() && mSize>0) {
 			randomIndex= rand.nextInt(size);
 			mSize--;
 		}
