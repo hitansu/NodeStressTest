@@ -1,7 +1,7 @@
 package testengine;
 
 /**
- * Script interface for Node start,stop
+ * Script interface for Node start,stop.
  * @author jenah
  *
  */

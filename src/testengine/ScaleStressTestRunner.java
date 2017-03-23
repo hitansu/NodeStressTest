@@ -3,7 +3,7 @@ package testengine;
 import java.util.List;
 
 /**
- * Scale,Stress test runner
+ * Scale,Stress test runner.
  * @author jenah
  *
  */

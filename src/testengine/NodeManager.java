@@ -10,7 +10,7 @@ import java.util.Queue;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 /**
- * Represents a cluster group, which might contain more than one nodes, in a host.
+ * Represents a cluster group, which might contain more than one nodes, in a host
  * 
  * @author jenah
  *

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Scale,Stress test implementation
+ * Scale,Stress test implementation.
  * @author jenah
  *
  */

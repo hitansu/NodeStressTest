@@ -5,7 +5,7 @@ import static testengine.Properties.ROOT_DIR;
 import static testengine.Properties.getServerName;
 
 /**
- * Script for unix
+ * Script for unix.
  * @author jenah
  *
  */

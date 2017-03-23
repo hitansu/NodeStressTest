@@ -1,7 +1,7 @@
 package testengine;
 
 /**
- * Node status
+ * Node status.
  * @author jenah
  *
  */

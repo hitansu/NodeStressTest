@@ -3,7 +3,7 @@ package testengine;
 import java.util.List;
 
 /**
- * Interface for implementing command remotely
+ * Interface for implementing command remotely.
  * @author jenah
  *
  */
