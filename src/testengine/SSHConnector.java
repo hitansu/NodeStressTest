@@ -7,7 +7,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 /**
- * SSH session connector.
+ * SSH session connector...
  * @author jenah
  *
  */

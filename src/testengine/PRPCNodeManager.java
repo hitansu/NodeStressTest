@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of NodeManager.
+ * Implementation of NodeManager...
  * @author jenah
  *
  */

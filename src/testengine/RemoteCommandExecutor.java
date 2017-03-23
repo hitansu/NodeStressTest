@@ -9,7 +9,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 /**
- * Command executor implementation.
+ * Command executor implementation...
  * @author jenah
  *
  */
